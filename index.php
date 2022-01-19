@@ -42,10 +42,9 @@
             private $password;
             private $age;
 
-            public function __construct ($username, $password, $age) {
-                $this-> username = getUsername($username);
-                $this-> password = $password;
-                $this-> age = $age;
+            public function __construct ($username, $password) {
+                $this->setUsername($username);
+                $this->setPassword($password);
             }
 
             // GETTER
@@ -62,24 +61,45 @@
             // OR 
             // SETTER
             public function setUsername ($username) {
-                $this->username = $username;
+                if (strlen($username) < 3 || strlen($username) > 16) {
+                    throw new Exception("Error: Il nome deve contenere dai 3 ai 16 caratteri");
+                    
+                 }else {
+                     $this->username = $username;
+                 }
             }
             public function setPassword ($password) {
-                $this->password = $password;
+                if (ctype_alnum($password)) {
+                    throw new Exception("Error: La password deve contenere almeno un caratter speciale");
+                } else {
+                    $this->password = $password;
+                }
             }
             public function setAge ($age) {
-                $this->age = $age;
+                if (!is_numeric($age)) {
+                    throw new Exception("Error: L'età deve essere scritta in numeri");
+                }else {
+                    $this->age = $age;
+                }
             }
 
             // PRINTER
-            public function __toString() {
-
-                return $this -> username . " " . $this -> password . " " . $this -> age;
-            }        
+            public function __toString(){
+                return "-Nome : " . $this-> getUsername() . "<br> -  Anni : " . $this->getAge() . "<br> Password : [" . $this->getPassword() . "]";
+            }
+            public function printMe(){
+                echo $this;
+            }     
             
         }
-        echo $u1;
-        $u1 = new User ("Marco", "capo", 13);
+        // DATI
+        try {
+            $u1 = new User ("Marco", "YO:YO");
+            $u1-> setAge (14);
+            $u1->printMe() . "<br>";
+        } catch (exception $e) {
+            echo $e->getMessage();
+        }
      ?>
 
     
